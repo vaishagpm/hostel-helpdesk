@@ -1,41 +1,33 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Report a problem</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <main class="page">
-    <h1>What's wrong?</h1>
+{% extends "base.html" %}
+{% block title %}Report a problem{% endblock %}
 
-    <form method="post">
-      <label for="room">Your room</label>
-      <input id="room" name="room" type="text" placeholder="A-204" required>
+{% block content %}
+<h1>What's wrong?</h1>
 
-      <button type="submit" name="emergency" value="1" formnovalidate class="emergency">
-        <strong>Emergency</strong>
-        <span>Enter your room, then tap to alert the warden</span>
-      </button>
+<form method="post">
+  <label for="room">Your room</label>
+  <input id="room" name="room" type="text" value="{{ room }}" placeholder="A-204" required>
 
-      <p class="section-label">Or choose a request type</p>
-      <div class="type-grid">
-        {% for t in types %}
-          <label class="type-tile">
-            <input type="radio" name="type" value="{{ t }}">
-            <span>{{ t }}</span>
-          </label>
-        {% endfor %}
-      </div>
+  <button type="submit" name="emergency" value="1" formnovalidate class="emergency">
+    <strong>Emergency</strong>
+    <span>Enter your room, then tap to alert the warden</span>
+  </button>
 
-      <label for="description">What's the problem?</label>
-      <textarea id="description" name="description" rows="3"
-                placeholder="Example: the tap in my bathroom is leaking"></textarea>
-      <p class="hint">Keep it short. Staff will see this exactly as you write it.</p>
+  <p class="section-label">Or choose a request type</p>
+  <div class="type-grid">
+    {% for t in types %}
+      <label class="type-tile">
+        <input type="radio" name="type" value="{{ t }}" {{ 'checked' if t == selected }}>
+        <span>{{ t }}</span>
+      </label>
+    {% endfor %}
+  </div>
 
-      <button type="submit" class="primary">Send request</button>
-    </form>
-  </main>
-</body>
-</html>
+  <label for="description">What's the problem?</label>
+  <textarea id="description" name="description" rows="3"
+            placeholder="Example: the tap in my bathroom is leaking">{{ description }}</textarea>
+  <p class="hint">Keep it short. Staff will see this exactly as you write it.</p>
+
+  <button type="submit" class="primary">Send request</button>
+</form>
+{% endblock %}

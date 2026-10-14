@@ -17,7 +17,7 @@ body {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-.page { max-width: 480px; margin: 0 auto; padding: 24px 20px 48px; }
+.page { max-width: 480px; margin: 0 auto; padding: 24px 20px 96px; }
 
 h1 { font-size: 28px; margin: 0 0 16px; }
 
@@ -92,3 +92,50 @@ textarea { resize: none; }
   font-weight: 700;
   cursor: pointer;
 }
+/* Messages */
+.flash { padding: 12px 14px; border-radius: 12px; margin-bottom: 16px; font-size: 15px; }
+.flash-error { background: #FDECEC; color: #7F1D1D; }
+.flash-success { background: #DDF3E4; color: #14572F; }
+
+/* Request cards */
+.card {
+  background: #fff;
+  border: 1px solid #D9DFE6;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.card h2 { font-size: 16px; margin: 0 0 4px; }
+.meta { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+.empty { color: var(--muted); }
+
+.status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.status-pending { background: #FFF0CC; color: #7A4B00; }
+.status-in-progress { background: #E1EAFF; color: #1740B0; }
+.status-done { background: #DDF3E4; color: #14572F; }
+
+/* Bottom tab bar */
+.tabs {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  background: #fff;
+  border-top: 1px solid #D9DFE6;
+}
+.tabs a {
+  flex: 1;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 14px;
+}
+.tabs a.active { color: var(--blue); font-weight: 700; }

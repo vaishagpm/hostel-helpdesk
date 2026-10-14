@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}My requests{% endblock %}
+
+{% block content %}
+<h1>My requests</h1>
+
+{% for r in requests %}
+  <article class="card">
+    <h2>{{ r.description }}</h2>
+    <p class="meta">{{ r.type }} · {{ r.room }} · {{ r.created_at | time_ago }} · #{{ r.id }}</p>
+    <span class="status status-{{ r.status | lower | replace(' ', '-') }}">{{ r.status }}</span>
+  </article>
+{% else %}
+  <p class="empty">No requests yet. Tap Report to tell us about a problem.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Staff dashboard{% endblock %}
+{% block page_class %}page-wide{% endblock %}
+
+{% block content %}
+<h1>Hostel requests</h1>
+<p class="hint">Open emergencies always stay at the top.</p>
+
+<div class="stats">
+  <div class="stat stat-emergency"><span>Open emergencies</span><strong>{{ open_emergencies }}</strong></div>
+  <div class="stat"><span>Pending</span><strong>{{ pending }}</strong></div>
+  <div class="stat"><span>In progress</span><strong>{{ in_progress }}</strong></div>
+  <div class="stat"><span>Done</span><strong>{{ done }}</strong></div>
+</div>
+
+<form method="get" class="filters">
+  <div>
+    <label for="f-type">Type</label>
+    <select id="f-type" name="type">
+      <option value="">All types</option>
+      {% for t in types %}
+        <option value="{{ t }}" {{ 'selected' if t == type_filter }}>{{ t }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label for="f-status">Status</label>
+    <select id="f-status" name="status">
+      <option value="">All statuses</option>
+      {% for s in statuses %}
+        <option value="{{ s }}" {{ 'selected' if s == status_filter }}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="filter-btn">Filter</button>
+</form>
+
+<div class="table-wrap">
+  <table class="requests-table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Room</th>
+        <th>Problem</th>
+        <th>Status</th>
+        <th>Waiting</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in requests %}
+      <tr class="{{ 'row-emergency' if r.type == 'Emergency' and r.status != 'Done' }}">
+        <td>
+          {% if r.type == 'Emergency' %}
+            <span class="tag-emergency">Emergency</span>
+          {% else %}
+            {{ r.type }}
+          {% endif %}
+        </td>
+        <td><strong>{{ r.room }}</strong></td>
+        <td>{{ r.description }}</td>
+        <td><span class="status status-{{ r.status | lower | replace(' ', '-') }}">{{ r.status }}</span></td>
+        <td>{{ r.created_at | time_ago }}</td>
+        <td>
+          {% if r.status == 'Pending' %}
+            <form method="post" action="{{ url_for('update_status', request_id=r.id) }}">
+              <input type="hidden" name="status" value="In progress">
+              <button type="submit" class="action-btn">Start work</button>
+            </form>
+          {% elif r.status == 'In progress' %}
+            <form method="post" action="{{ url_for('update_status', request_id=r.id) }}">
+              <input type="hidden" name="status" value="Done">
+              <button type="submit" class="action-btn action-done">Mark done</button>
+            </form>
+          {% else %}
+            Completed
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="empty">No requests match these filters.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

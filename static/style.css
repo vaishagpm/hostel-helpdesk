@@ -139,3 +139,81 @@ textarea { resize: none; }
   font-size: 14px;
 }
 .tabs a.active { color: var(--blue); font-weight: 700; }
+/* ---------- Staff dashboard ---------- */
+.page-wide { max-width: 1100px; }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 16px 0; }
+.stat {
+  background: #fff;
+  border: 1px solid #D9DFE6;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stat span { font-size: 14px; color: var(--muted); font-weight: 700; }
+.stat strong { font-size: 32px; line-height: 38px; }
+.stat-emergency { background: var(--red); border-color: var(--red); color: #fff; }
+.stat-emergency span { color: #fff; font-weight: 500; }
+
+.filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px; }
+.filters label { margin: 0 0 4px; font-size: 13px; }
+.filters select {
+  height: 44px;
+  min-width: 160px;
+  padding: 0 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  font-size: 15px;
+  color: var(--text);
+}
+.filter-btn {
+  height: 44px;
+  padding: 0 20px;
+  background: var(--text);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.table-wrap { overflow-x: auto; background: #fff; border: 1px solid #D9DFE6; border-radius: 16px; }
+.requests-table { width: 100%; min-width: 760px; border-collapse: collapse; }
+.requests-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  border-bottom: 1px solid #D9DFE6;
+}
+.requests-table td { padding: 14px 16px; border-bottom: 1px solid #D9DFE6; font-size: 15px; vertical-align: middle; }
+.requests-table tr:last-child td { border-bottom: 0; }
+.requests-table form { margin: 0; }
+.row-emergency { background: #FDECEC; }
+.tag-emergency {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--red);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+.action-btn {
+  min-height: 44px;
+  padding: 0 16px;
+  background: var(--blue);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.action-done { background: #fff; color: #14572F; border: 1.5px solid #14572F; }

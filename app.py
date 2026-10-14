@@ -9,6 +9,7 @@ app.secret_key = "change-this-later"  # needed for flash messages
 
 DATABASE = "hostel.db"
 REQUEST_TYPES = ["Cleaning", "Plumbing", "Electrical", "Wi-Fi", "Furniture", "Other"]
+STATUSES = ["Pending", "In progress", "Done"]
 ROOM_PATTERN = re.compile(r"^[A-Z]-\d{3}$")  # example: A-204
 
 
@@ -117,5 +118,52 @@ def my_requests():
     return render_template("requests.html", requests=rows)
 
 
+@app.route("/staff")
+def staff():
+    type_filter = request.args.get("type", "")
+    status_filter = request.args.get("status", "")
+
+    query = "SELECT * FROM requests WHERE 1=1"
+    params = []
+    if type_filter:
+        query += " AND type = ?"
+        params.append(type_filter)
+    if status_filter:
+        query += " AND status = ?"
+        params.append(status_filter)
+    # Open emergencies first, then open requests (oldest first), then done ones
+    query += (" ORDER BY (type = 'Emergency' AND status != 'Done') DESC,"
+              " (status = 'Done') ASC,"
+              " CASE WHEN status = 'Done' THEN -id ELSE id END ASC")
+
+    db = get_db()
+    rows = db.execute(query, params).fetchall()
+
+    counts = {r["status"]: r["n"] for r in db.execute(
+        "SELECT status, COUNT(*) AS n FROM requests GROUP BY status")}
+    open_emergencies = db.execute(
+        "SELECT COUNT(*) FROM requests WHERE type = 'Emergency' AND status != 'Done'"
+    ).fetchone()[0]
+
+    return render_template(
+        "staff.html", requests=rows,
+        types=REQUEST_TYPES + ["Emergency"], statuses=STATUSES,
+        type_filter=type_filter, status_filter=status_filter,
+        open_emergencies=open_emergencies,
+        pending=counts.get("Pending", 0),
+        in_progress=counts.get("In progress", 0),
+        done=counts.get("Done", 0),
+    )
+
+
+@app.route("/staff/<int:request_id>/status", methods=["POST"])
+def update_status(request_id):
+    new_status = request.form.get("status", "")
+    if new_status in STATUSES:
+        db = get_db()
+        db.execute("UPDATE requests SET status = ? WHERE id = ?",
+                   (new_status, request_id))
+        db.commit()
+    return redirect(url_for("staff"))
 if __name__ == "__main__":
     app.run(debug=True)
